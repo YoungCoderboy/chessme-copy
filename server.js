@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const { Server } = require("socket.io");
 const { v4: uuidV4 } = require("uuid");
@@ -5,6 +6,13 @@ const { v4: uuidV4 } = require("uuid");
 const app = express(); // initialize express
 
 const port = process.env.PORT || 8080;
+
+if (process.env.PROD) {
+  app.use(express.static(path.join(__dirname, "./client/build")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./client/build/index.html"));
+  });
+}
 
 // io.connection
 
